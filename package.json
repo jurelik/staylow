@@ -1,0 +1,19 @@
+{
+  "name": "staylow",
+  "version": "1.0.0",
+  "description": "A Node.JS module with a custom prompt for CLI chat applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurelik/staylow.git"
+  },
+  "author": "jurelik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jurelik/staylow/issues"
+  },
+  "homepage": "https://github.com/jurelik/staylow#readme"
+}
