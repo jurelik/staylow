@@ -1,7 +1,6 @@
 const readline = require('readline');
 
 let buffer = []; //Buffer of pressed keys
-let promptActive = false; //Is a prompt active?
 let muted = false; //Is mute active?
 
 const rl = readline.createInterface({
@@ -14,15 +13,27 @@ process.stdin.on('keypress', (val, key) => {
   if(key.name === 'backspace') {
     if (buffer.length > 1) {
       buffer.pop();
+      if (muted === true) { //Redraw input on backspace
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        process.stdout.write(buffer[0]);
+        for (x = 1; x < buffer.length; x++) {
+          process.stdout.write('*');
+        }
+      }
     }
   }
   else if(val === '\r') {
-    if (!promptActive) {
-      buffer = [];
+    if (muted === true) { //Redraw input on enter
+      process.stdout.clearLine();
+      process.stdout.cursorTo(0);
+      process.stdout.write(buffer[0]);
+      for (x = 1; x < buffer.length; x++) {
+        process.stdout.write('*');
+      }
+      process.stdout.write('\n');
     }
-    else {
-      promptActive = false;
-    }
+    buffer = [];
   }
   else if (key.name != 'backspace' && val != '\r') {
     buffer.push(val)
@@ -81,9 +92,6 @@ exports.prompt = function(question, mute, callback) {
   }
   buffer.unshift(question);
   rl.question(question, (res) => {
-    promptActive = true;
-    buffer = [];
-    muted = false;
     callback(res);
   });
 }
