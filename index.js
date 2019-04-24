@@ -2,6 +2,7 @@ const readline = require('readline');
 
 let buffer = []; //Buffer of pressed keys
 let muted = false; //Is mute active?
+let allowNoPrompt = false; //Disable '>' default prompt
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,7 +11,7 @@ const rl = readline.createInterface({
 
 //Keep track of pressed keys
 process.stdin.on('keypress', (val, key) => {
-  if(key.name === 'backspace') {
+  if(key.name === 'backspace' && val != '\r') {
     if (buffer.length > 1) {
       buffer.pop();
       if (muted === true) { //Redraw input on backspace
@@ -22,18 +23,6 @@ process.stdin.on('keypress', (val, key) => {
         }
       }
     }
-  }
-  else if(val === '\r') {
-    if (muted === true) { //Redraw input on enter
-      process.stdout.clearLine();
-      process.stdout.cursorTo(0);
-      process.stdout.write(buffer[0]);
-      for (x = 1; x < buffer.length; x++) {
-        process.stdout.write('*');
-      }
-      process.stdout.write('\n');
-    }
-    buffer = [];
   }
   else if (key.name != 'backspace' && val != '\r') {
     buffer.push(val)
@@ -75,7 +64,7 @@ exports.prompt = function(question, mute, callback) {
       if (rl._questionCallback) {
         rl.prompt();
       } else {
-        rl._oldPrompt = this._prompt;
+        rl._oldPrompt = rl._prompt;
         rl.setPrompt(query);
         rl._questionCallback = cb;
         rl.prompt();
@@ -83,16 +72,43 @@ exports.prompt = function(question, mute, callback) {
         if (mute) {
           muted = true;
         }
+        else {
+          muted = false;
+        }
         //
       }
     }
   }; 
-  if (question === '') {
+  if (question === '' && !allowNoPrompt) {
     question = '> ';
+  }
+  else if (question === '' && allowNoPrompt) {
+    question = '';
   }
   buffer.unshift(question);
   rl.question(question, (res) => {
+    //Redraw input on enter
+    if (muted === true) {
+      process.stdout.clearLine();
+      process.stdout.cursorTo(0);
+      process.stdout.write(buffer[0]);
+      for (x = 1; x < buffer.length; x++) {
+        process.stdout.write('*');
+      }
+      process.stdout.write('\n');
+    }
+    //Back into default state
+    buffer = [];
+    muted = false;
     callback(res);
   });
-}
+};
+
+//Helper function for changing the value of allowNoPrompt
+/**
+ * @param {boolean} allow
+ */
+exports.allowNoPrompt = function(allow) {
+  allowNoPrompt = allow;
+};
 
