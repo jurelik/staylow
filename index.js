@@ -40,6 +40,9 @@ rl._writeToOutput = function _writeToOutput(stringToWrite) {
 };
 
 //Custom log function
+/**
+ * @param {string} text
+ */
 exports.log = function(text) {
   process.stdout.clearLine();
   process.stdout.cursorTo(0);
@@ -57,51 +60,50 @@ exports.log = function(text) {
 
 //Custom prompt function
 /**
- * @param {string} question
+ * @param {object} options
  */
-exports.prompt = function(question, mute = false) {
-  return new Promise((resolve, reject) => {
-    //Change the readline question function
-    rl.question = function(query, cb) {
-      if (typeof cb === 'function') {
-        if (rl._questionCallback) {
-          rl.prompt();
-        } else {
-          rl._oldPrompt = rl._prompt;
-          rl.setPrompt(query);
-          rl._questionCallback = cb;
-          rl.prompt();
-          //Inject this bit
-          if (mute) {
-            muted = true;
-          }
-          else {
-            muted = false;
-          }
-          //
+exports.prompt = function(options, callback) {
+  options = options || {};
+  options.question = options.question || defaultPrompt;
+  options.mute = options.mute || false;
+
+  //Change the readline question function
+  rl.question = function(query, cb) {
+    if (typeof cb === 'function') {
+      if (rl._questionCallback) {
+        rl.prompt();
+      } else {
+        rl._oldPrompt = rl._prompt;
+        rl.setPrompt(query);
+        rl._questionCallback = cb;
+        rl.prompt();
+        //Inject this bit
+        if (options.mute) {
+          muted = true;
         }
+        else {
+          muted = false;
+        }
+        //
       }
-    }; 
-    if (question === '') {
-      question = defaultPrompt;
     }
-    buffer.unshift(question);
-    rl.question(question, (res) => {
-      //Redraw input on enter
-      if (muted === true) {
-        process.stdout.clearLine();
-        process.stdout.cursorTo(0);
-        process.stdout.write(buffer[0]);
-        for (x = 1; x < buffer.length; x++) {
-          process.stdout.write('*');
-        }
-        process.stdout.write('\n');
+  }; 
+  buffer.unshift(options.question);
+  rl.question(options.question, (res) => {
+    //Redraw input on enter
+    if (muted === true) {
+      process.stdout.clearLine();
+      process.stdout.cursorTo(0);
+      process.stdout.write(buffer[0]);
+      for (x = 1; x < buffer.length; x++) {
+        process.stdout.write('*');
       }
-      //Back into default state
-      buffer = [];
-      muted = false;
-      resolve(res);
-    });
+      process.stdout.write('\n');
+    }
+    //Back into default state
+    buffer = [];
+    muted = false;
+    callback(res);
   });
 };
 
