@@ -4,7 +4,7 @@ A Node.JS module with custom prompt and log functions, mainly intended for CLI c
 ## Init
 ```
 const sl = require('staylow');
-sl.defaultPrompt('> '); // set default prompt
+sl.defaultPrompt('> '); // set defaultPrompt
 ```
 
 ## Prompt
@@ -12,6 +12,10 @@ Normal prompt:
 ```
 sl.prompt('Say hi: ', res => {
   //user input will be visible
+});
+
+sl.prompt('', res => {
+  //in this case the prompt will default to defaultPrompt
 });
 ```
 Masked prompt:
