@@ -95,7 +95,10 @@ exports.prompt = function(question, mute, callback) {
           //
         }
       }
-    }; 
+    };
+    if (question === '') {
+      question = defaultPrompt;
+    }
     buffer.unshift(question);
     rl.question(question, (res) => {
       //Redraw input on enter
