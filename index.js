@@ -60,51 +60,63 @@ exports.log = function(text) {
 
 //Custom prompt function
 /**
- * @param {object} options
+ * @param {string} question
+ * @param {boolean} mute
+ * @param {function} callback
  */
-exports.prompt = function(options, callback) {
-  options = options || {};
-  options.question = options.question || defaultPrompt;
-  options.mute = options.mute || false;
-
-  //Change the readline question function
-  rl.question = function(query, cb) {
-    if (typeof cb === 'function') {
-      if (rl._questionCallback) {
-        rl.prompt();
-      } else {
-        rl._oldPrompt = rl._prompt;
-        rl.setPrompt(query);
-        rl._questionCallback = cb;
-        rl.prompt();
-        //Inject this bit
-        if (options.mute) {
-          muted = true;
-        }
-        else {
-          muted = false;
-        }
-        //
-      }
+exports.prompt = function(question, mute, callback) {
+  try {
+    //Check for different function parameter positioning
+    if(arguments.length === 2 && typeof arguments[1] === 'function') {
+      callback = arguments[1];
+      mute = false;
     }
-  }; 
-  buffer.unshift(options.question);
-  rl.question(options.question, (res) => {
-    //Redraw input on enter
-    if (muted === true) {
-      process.stdout.clearLine();
-      process.stdout.cursorTo(0);
-      process.stdout.write(buffer[0]);
-      for (x = 1; x < buffer.length; x++) {
-        process.stdout.write('*');
-      }
-      process.stdout.write('\n');
+    else if (typeof arguments[1] != 'boolean' || typeof arguments[2] != 'function') {
+      console.log(arguments);
+      throw new Error('Prompt function parameters are not set correctly.');
     }
-    //Back into default state
-    buffer = [];
-    muted = false;
-    callback(res);
-  });
+    //Change the readline question function
+    rl.question = function(query, cb) {
+      if (typeof cb === 'function') {
+        if (rl._questionCallback) {
+          rl.prompt();
+        } else {
+          rl._oldPrompt = rl._prompt;
+          rl.setPrompt(query);
+          rl._questionCallback = cb;
+          rl.prompt();
+          //Inject this bit
+          if (mute) {
+            muted = true;
+          }
+          else {
+            muted = false;
+          }
+          //
+        }
+      }
+    }; 
+    buffer.unshift(question);
+    rl.question(question, (res) => {
+      //Redraw input on enter
+      if (muted === true) {
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        process.stdout.write(buffer[0]);
+        for (x = 1; x < buffer.length; x++) {
+          process.stdout.write('*');
+        }
+        process.stdout.write('\n');
+      }
+      //Back into default state
+      buffer = [];
+      muted = false;
+      callback(res);
+    });
+  }
+  catch(err) {
+    console.log(err);
+  }
 };
 
 //Helper function for changing the value of defaultPrompt
