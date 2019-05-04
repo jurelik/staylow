@@ -5,6 +5,7 @@ A Node.JS module with custom prompt and log functions, mainly intended for CLI c
 ```
 const sl = require('staylow');
 sl.defaultPrompt('> '); // set defaultPrompt
+sl.setMask('*'); // set the mask used for muted input (defaults to '*');
 ```
 
 ## Prompt
