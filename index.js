@@ -2,8 +2,12 @@ const readline = require('readline');
 
 let buffer = []; //Buffer of pressed keys
 let muted = false; //Is mute active?
-let defaultPrompt = '> '; //Default prompt
-let globalMask = '*'; 
+
+let globalOptions = {
+  defaultPrompt: '> ', //Default prompt
+  globalMask: '*', //Mask for muted inputs
+  logOnEnter: 'true' //Behavior on 'enter' keypress
+}
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -21,7 +25,7 @@ process.stdin.on('keypress', (val, key) => {
         process.stdout.cursorTo(0);
         process.stdout.write(buffer[0]);
         for (x = 1; x < buffer.length; x++) {
-          process.stdout.write(globalMask);
+          process.stdout.write(globalOptions.globalMask);
         }
       }
     }
@@ -34,8 +38,14 @@ process.stdin.on('keypress', (val, key) => {
 //Change the readline logging function
 rl._writeToOutput = function _writeToOutput(stringToWrite) {
   if (muted === true) {
-    rl.output.write(globalMask);
+    rl.output.write(globalOptions.globalMask);
   }
+  //This overwrites the default behaviour of loggin when pressing enter
+  else if (/\r|\n/.test(stringToWrite) && globalOptions.logOnEnter === 'false') {
+    process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+  }
+  //
   else {
     rl.output.write(stringToWrite);
   }
@@ -89,17 +99,17 @@ exports.prompt = function(question, mute, callback) {
       }
     };
     if (question === '') {
-      question = defaultPrompt;
+      question = globalOptions.defaultPrompt;
     }
     buffer.unshift(question);
     rl.question(question, (res) => {
       //Redraw input on enter
-      if (muted === true) {
+      if (muted === true && globalOptions.logOnEnter === 'true') {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         process.stdout.write(buffer[0]);
         for (x = 1; x < buffer.length; x++) {
-          process.stdout.write(globalMask);
+          process.stdout.write(globalOptions.globalMask);
         }
         process.stdout.write('\n');
       }
@@ -115,20 +125,17 @@ exports.prompt = function(question, mute, callback) {
   }
 };
 
-//Helper function for changing the value of defaultPrompt
+//Helper function for changing the options
 /**
- * @param {string} prompt
+ * @param {Object} options - Options object
+ * @param {String} [options.defaultPrompt] - Change the default prompt
+ * @param {String} [options.globalMask] - Change the mask for muted prompts
+ * @param {String} [options.logOnEnter] - Change behavior on 'enter' keypress
  */
-exports.defaultPrompt = function(prompt) {
-  defaultPrompt = prompt;
-};
-
-//Helper function for changing the value of mask
-/**
- * @param {String} mask
- */
-exports.setMask = function(mask) {
-  globalMask = mask;
+exports.options = function(options) {
+  globalOptions.defaultPrompt = options.defaultPrompt || globalOptions.defaultPrompt;
+  globalOptions.globalMask = options.globalMask || globalOptions.globalMask;
+  globalOptions.logOnEnter = options.logOnEnter || globalOptions.logOnEnter;
 }
 
 //Helper function for saving an entry to history

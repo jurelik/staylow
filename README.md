@@ -4,6 +4,11 @@ A Node.JS module with custom prompt and log functions, mainly intended for CLI c
 ## Init
 ```
 const sl = require('staylow');
+sl.options({
+  defaultPrompt: String // (defaults to '> ')
+  globalMask: String // set the mask used for muted input (defaults to '*')
+  logOnEnter: String // 'true' or 'false', change default behavior on 'enter' keypress (defaults to 'true')
+});
 sl.defaultPrompt('> '); // set defaultPrompt
 sl.setMask('*'); // set the mask used for muted input (defaults to '*');
 ```
@@ -16,13 +21,13 @@ sl.prompt('Say hi: ', res => {
 });
 
 sl.prompt('', res => {
-  //in this case the prompt will default to defaultPrompt
+  //in this case the prompt will default to options.defaultPrompt
 });
 ```
 Masked prompt:
 ```
 sl.prompt('Say hi: ', true, res => {
-  //user input will be masked with '*'
+  //user input will be masked with options.globalMask
 });
 ```
 Saving history:
