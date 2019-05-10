@@ -136,5 +136,10 @@ exports.setMask = function(mask) {
  * @param {String} entry
  */
 exports.addToHistory = function(entry) {
+  rl.history.forEach(res => {
+    if (res === entry) {
+      rl.history.splice(rl.history.indexOf(res));
+    }
+  });
   rl.history.unshift(entry);
 }
