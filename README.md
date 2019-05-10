@@ -25,6 +25,12 @@ sl.prompt('Say hi: ', true, res => {
   //user input will be masked with '*'
 });
 ```
+Saving history:
+```
+//By default, user entries won't be saved to the entry history
+//To save manually, use the following:
+sl.addToHistory('String you want to save');
+```
 ## Log
 Always use the staylow log method instead of console.log to output to terminal. This insures that any active user prompts won't be interrupted.
 ```

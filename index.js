@@ -94,7 +94,6 @@ exports.prompt = function(question, mute, callback) {
     rl.question(question, (res) => {
       //Redraw input on enter
       if (muted === true) {
-        rl.history.shift();
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         process.stdout.write(buffer[0]);
@@ -104,6 +103,7 @@ exports.prompt = function(question, mute, callback) {
         process.stdout.write('\n');
       }
       //Back into default state
+      rl.history.shift();
       buffer = [];
       muted = false;
       callback(res);
@@ -130,3 +130,10 @@ exports.setMask = function(mask) {
   globalMask = mask;
 }
 
+//Helper function for saving an entry to history
+/**
+ * @param {String} entry
+ */
+exports.addToHistory = function(entry) {
+  rl.history.unshift(entry);
+}
