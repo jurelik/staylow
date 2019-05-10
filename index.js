@@ -37,8 +37,11 @@ process.stdin.on('keypress', (val, key) => {
 
 //Change the readline logging function
 rl._writeToOutput = function _writeToOutput(stringToWrite) {
-  if (muted === true) {
+  if (muted === true && !/\r|\n/.test(stringToWrite)) {
     rl.output.write(globalOptions.globalMask);
+  }
+  else if (muted === true && /\r|\n/.test(stringToWrite)) {
+    //do nothing
   }
   //This overwrites the default behaviour of loggin when pressing enter
   else if (/\r|\n/.test(stringToWrite) && globalOptions.logOnEnter === 'false') {
@@ -46,7 +49,7 @@ rl._writeToOutput = function _writeToOutput(stringToWrite) {
     process.stdout.cursorTo(0);
   }
   //
-  else {
+  else{
     rl.output.write(stringToWrite);
   }
 };
@@ -133,9 +136,29 @@ exports.prompt = function(question, mute, callback) {
  * @param {String} [options.logOnEnter] - Change behavior on 'enter' keypress
  */
 exports.options = function(options) {
-  globalOptions.defaultPrompt = options.defaultPrompt || globalOptions.defaultPrompt;
-  globalOptions.globalMask = options.globalMask || globalOptions.globalMask;
-  globalOptions.logOnEnter = options.logOnEnter || globalOptions.logOnEnter;
+  //defaultPrompt
+  if (options.defaultPrompt === '') {
+    globalOptions.defaultPrompt = options.defaultPrompt;
+  }
+  else {
+    globalOptions.defaultPrompt = options.defaultPrompt || globalOptions.defaultPrompt;
+  }
+
+  //globalMask
+  if (options.globalMask === '') {
+    globalOptions.globalMask = options.globalMask;
+  }
+  else {
+    globalOptions.globalMask = options.globalMask || globalOptions.globalMask;
+  }
+  
+  //logOnEnter
+  if (options.logOnEnter === 'false') {
+    globalOptions.logOnEnter = options.logOnEnter;
+  }
+  else {
+    globalOptions.logOnEnter = 'true';
+  } 
 }
 
 //Helper function for saving an entry to history
