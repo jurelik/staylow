@@ -9,8 +9,6 @@ sl.options({
   globalMask: String // set the mask used for muted input (defaults to '*')
   logOnEnter: String // 'true' or 'false', change default behavior on 'enter' keypress (defaults to 'true')
 });
-sl.defaultPrompt('> '); // set defaultPrompt
-sl.setMask('*'); // set the mask used for muted input (defaults to '*');
 ```
 
 ## Prompt
