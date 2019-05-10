@@ -7,7 +7,8 @@ let globalMask = '*';
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  removeHistoryDuplicates: true
 });
 
 //Keep track of pressed keys
