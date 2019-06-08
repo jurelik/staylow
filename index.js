@@ -105,7 +105,9 @@ exports.prompt = function(question, mute, callback) {
       question = globalOptions.defaultPrompt;
     }
     buffer.unshift(question);
+    rl.resume();
     rl.question(question, (res) => {
+      rl.pause();
       //Redraw input on enter
       if (muted === true && globalOptions.logOnEnter === 'true') {
         process.stdout.clearLine();
@@ -172,14 +174,4 @@ exports.addToHistory = function(entry) {
     }
   });
   rl.history.unshift(entry);
-}
-
-//Wrapper for rl.pause();
-exports.pause = function() {
-  rl.pause();
-}
-
-//Wrapper for rl.resume();
-exports.resume = function() {
-  rl.resume();
 }
