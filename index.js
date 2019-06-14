@@ -21,18 +21,25 @@ process.stdin.on('keypress', (val, key) => {
   if(key.name === 'backspace' && val != '\r') {
     if (buffer.length > 1) {
       buffer.pop();
-      if (muted === true) { //Redraw input on backspace
-        process.stdout.clearLine();
-        process.stdout.cursorTo(0);
-        process.stdout.write(buffer[0]);
-        for (x = 1; x < buffer.length; x++) {
+      //Redraw input on backspace
+      process.stdout.clearLine();
+      process.stdout.cursorTo(0);
+      process.stdout.write(buffer[0]);
+      for (let x = 1; x < buffer.length; x++) {
+        if (muted === true) {
           process.stdout.write(globalOptions.globalMask);
+        }
+        else {
+          process.stdout.write(buffer[x]);
         }
       }
     }
   }
   else if (key.name != 'backspace' && val != '\r') {
     buffer.push(val)
+  }
+  else if (val === '\r' && !promptActive) { //Clear buffer on enter when prompt is not active
+    buffer = [];
   }
 });
 
@@ -65,7 +72,7 @@ exports.log = function(text) {
   console.log(text);
   if (promptActive) {
     process.stdout.write(buffer[0]);
-    for (x = 1; x < buffer.length; x++) {
+    for (let x = 1; x < buffer.length; x++) {
       if (muted === true) {
         process.stdout.write(globalOptions.globalMask);
       }
@@ -75,7 +82,7 @@ exports.log = function(text) {
     }
   }
   else {
-    for (x = 0; x < buffer.length; x++) {
+    for (let x = 0; x < buffer.length; x++) {
       if (muted === true) {
         process.stdout.write(globalOptions.globalMask);
       }
@@ -137,7 +144,7 @@ exports.prompt = function(question, mute, callback) {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         process.stdout.write(buffer[0]);
-        for (x = 1; x < buffer.length; x++) {
+        for (let x = 1; x < buffer.length; x++) {
           process.stdout.write(globalOptions.globalMask);
         }
         process.stdout.write('\n');
