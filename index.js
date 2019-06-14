@@ -2,6 +2,7 @@ const readline = require('readline');
 
 let buffer = []; //Buffer of pressed keys
 let muted = false; //Is mute active?
+let promptActive = false; //Is prompt active?
 
 let globalOptions = {
   defaultPrompt: '> ', //Default prompt
@@ -62,6 +63,28 @@ exports.log = function(text) {
   process.stdout.clearLine();
   process.stdout.cursorTo(0);
   console.log(text);
+  if (promptActive) {
+    process.stdout.write(buffer[0]);
+    for (x = 1; x < buffer.length; x++) {
+      if (muted === true) {
+        process.stdout.write(globalOptions.globalMask);
+      }
+      else {
+        process.stdout.write(buffer[x]);
+      }
+    }
+  }
+  else {
+    for (x = 0; x < buffer.length; x++) {
+      if (muted === true) {
+        process.stdout.write(globalOptions.globalMask);
+      }
+      else {
+        process.stdout.write(buffer[x]);
+      }
+    }
+  }
+  
 };
 
 //Custom prompt function
@@ -106,6 +129,7 @@ exports.prompt = function(question, mute, callback) {
     }
     buffer.unshift(question);
     rl.resume();
+    promptActive = true;
     rl.question(question, (res) => {
       rl.pause();
       //Redraw input on enter
@@ -122,6 +146,7 @@ exports.prompt = function(question, mute, callback) {
       rl.history.shift();
       buffer = [];
       muted = false;
+      promptActive = false;
       callback(res);
     });
   }
