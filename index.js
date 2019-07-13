@@ -48,7 +48,7 @@ process.stdin.on('keypress', (val, key) => {
     }
   }
   else if (key.name === 'down' && val != '\r') {
-    if (upCounter > 0) {
+    if (upCounter - 1 > 0) {
       upCounter--;
       let split = rl.history[upCounter - 1].split('');
       buffer.splice(1);
