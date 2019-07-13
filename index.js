@@ -236,3 +236,8 @@ exports.pause = function() {
 exports.resume = function() {
   rl.resume();
 }
+
+//Show current history
+exports.showHistory = function() {
+  console.log(rl.history);
+}
