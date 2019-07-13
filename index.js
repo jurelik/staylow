@@ -3,6 +3,7 @@ const readline = require('readline');
 let buffer = []; //Buffer of pressed keys
 let muted = false; //Is mute active?
 let promptActive = false; //Is prompt active?
+let upCounter = 0; //How many times has up/down been pressed
 
 let globalOptions = {
   defaultPrompt: '> ', //Default prompt
@@ -35,11 +36,28 @@ process.stdin.on('keypress', (val, key) => {
       }
     }
   }
-  else if (key.name != 'backspace' && val != '\r') {
+  else if (key.name != 'backspace' && val != '\r' && key.name != 'up' && key.name != 'down') {
     buffer.push(val)
+  }
+  else if (key.name === 'up' && val != '\r') {
+    if (upCounter + 1 <= rl.history.length) {
+      upCounter++;
+      let split = rl.history[upCounter - 1].split('');
+      buffer.splice(1);
+      buffer.push(...split);
+    }
+  }
+  else if (key.name === 'down' && val != '\r') {
+    if (upCounter > 0) {
+      upCounter--;
+      let split = rl.history[upCounter - 1].split('');
+      buffer.splice(1);
+      buffer.push(...split);
+    }
   }
   else if (val === '\r' && !promptActive) { //Clear buffer on enter when prompt is not active
     buffer = [];
+    upCounter = 0;
   }
 });
 
@@ -152,6 +170,7 @@ exports.prompt = function(question, mute, callback) {
       //Back into default state
       rl.history.shift();
       buffer = [];
+      upCounter = 0;
       muted = false;
       promptActive = false;
       callback(res);
