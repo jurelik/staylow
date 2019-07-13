@@ -1,6 +1,6 @@
 {
   "name": "staylow",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "A Node.JS module with a custom prompt for CLI chat applications.",
   "main": "index.js",
   "scripts": {
