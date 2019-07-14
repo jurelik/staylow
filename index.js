@@ -79,7 +79,13 @@ process.stdin.on('keypress', (val, key) => {
 //Change the readline logging function
 rl._writeToOutput = function _writeToOutput(stringToWrite) {
   if (muted === true && !/\r|\n/.test(stringToWrite)) {
-    rl.output.write(globalOptions.globalMask);
+    //Redraw input when input is muted
+    process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+    process.stdout.write(buffer[0]);
+    for (let x = 0; x < buffer.length; x++) {
+      process.stdout.write(globalOptions.globalMask);
+    }
   }
   else if (muted === true && /\r|\n/.test(stringToWrite)) {
     //do nothing
@@ -124,7 +130,6 @@ exports.log = function(text) {
       }
     }
   }
-  
 };
 
 //Custom prompt function
