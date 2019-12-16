@@ -91,9 +91,9 @@ rl._writeToOutput = function _writeToOutput(stringToWrite) {
   else if (muted === true && /\r|\n/.test(stringToWrite)) {
     //do nothing
   }
-  //This overwrites the default behaviour of loggin when pressing enter
+  //This overwrites the default behaviour of logging when pressing enter
   else if (/\r|\n/.test(stringToWrite) && globalOptions.logOnEnter === 'false') {
-    process.stdout.clearLine();
+    rl._deleteLineLeft();
     process.stdout.cursorTo(0);
   }
   //
@@ -234,14 +234,14 @@ exports.options = function(options) {
   else {
     globalOptions.globalMask = options.globalMask || globalOptions.globalMask;
   }
-  
+
   //logOnEnter
   if (options.logOnEnter === 'false') {
     globalOptions.logOnEnter = options.logOnEnter;
   }
   else {
     globalOptions.logOnEnter = 'true';
-  } 
+  }
 }
 
 //Helper function for saving an entry to history

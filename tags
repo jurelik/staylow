@@ -1,0 +1,57 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/9f494f0/
+0	package.json	/^    "command",$/;"	s	array:keywords
+1	package.json	/^    "prompt",$/;"	s	array:keywords
+2	package.json	/^    "cli",$/;"	s	array:keywords
+3	package.json	/^    "stdin",$/;"	s	array:keywords
+4	package.json	/^    "tty"$/;"	s	array:keywords
+Init	README.md	/^## Init$/;"	s
+Log	README.md	/^## Log$/;"	s
+Pause / Resume	README.md	/^## Pause \/ Resume$/;"	s
+Prompt	README.md	/^## Prompt$/;"	s
+_writeToOutput	index.js	/^rl._writeToOutput = function _writeToOutput(stringToWrite) {$/;"	f
+_writeToOutput	index.js	/^rl._writeToOutput = function _writeToOutput(stringToWrite) {$/;"	f	function:rl
+addToHistory	index.js	/^exports.addToHistory = function(entry) {$/;"	f	function:exports
+author	package.json	/^  "author": "jurelik",$/;"	s
+buffer	index.js	/^let buffer = []; \/\/Buffer of pressed keys$/;"	v
+bugs	package.json	/^  "bugs": {$/;"	o
+defaultPrompt	index.js	/^  defaultPrompt: '> ', \/\/Default prompt$/;"	p	class:globalOptions
+description	package.json	/^  "description": "A Node.JS module with a custom prompt for CLI chat applications.",$/;"	s
+globalMask	index.js	/^  globalMask: '*', \/\/Mask for muted inputs$/;"	p	class:globalOptions
+globalOptions	index.js	/^let globalOptions = {$/;"	c
+homepage	package.json	/^  "homepage": "https:\/\/github.com\/jurelik\/staylow#readme",$/;"	s
+keywords	package.json	/^  "keywords": [$/;"	a
+leftCounter	index.js	/^let leftCounter = 0; \/\/How many times has left\/right been pressed$/;"	v
+license	package.json	/^  "license": "ISC",$/;"	s
+log	index.js	/^exports.log = function(text) {$/;"	f	function:exports
+logOnEnter	index.js	/^  logOnEnter: 'true' \/\/Behavior on 'enter' keypress$/;"	p	class:globalOptions
+main	package.json	/^  "main": "index.js",$/;"	s
+main	test.js	/^function main() {$/;"	f
+muted	index.js	/^let muted = false; \/\/Is mute active?$/;"	v
+name	package.json	/^  "name": "staylow",$/;"	s
+options	index.js	/^exports.options = function(options) {$/;"	f	function:exports
+pause	index.js	/^exports.pause = function() {$/;"	f	function:exports
+prompt	index.js	/^exports.prompt = function(question, mute, callback) {$/;"	f	function:exports
+promptActive	index.js	/^let promptActive = false; \/\/Is prompt active?$/;"	v
+question	index.js	/^    rl.question = function(query, cb) {$/;"	f	function:rl
+readline	index.js	/^const readline = require('readline');$/;"	C
+repository	package.json	/^  "repository": {$/;"	o
+resume	index.js	/^exports.resume = function() {$/;"	f	function:exports
+rl	index.js	/^const rl = readline.createInterface({$/;"	C
+scripts	package.json	/^  "scripts": {$/;"	o
+showHistory	index.js	/^exports.showHistory = function() {$/;"	f	function:exports
+sl	test.js	/^const sl = require('.\/index');$/;"	C
+staylow	README.md	/^# staylow$/;"	c
+tempHistory	index.js	/^let tempHistory = []; \/\/Store history while input is muted$/;"	v
+test	package.json	/^    "test": "echo \\"Error: no test specified\\" && exit 1"$/;"	s	object:scripts
+type	package.json	/^    "type": "git",$/;"	s	object:repository
+upCounter	index.js	/^let upCounter = 0; \/\/How many times has up\/down been pressed$/;"	v
+url	package.json	/^    "url": "git+https:\/\/github.com\/jurelik\/staylow.git"$/;"	s	object:repository
+url	package.json	/^    "url": "https:\/\/github.com\/jurelik\/staylow\/issues"$/;"	s	object:bugs
+version	package.json	/^  "version": "1.1.15",$/;"	s
